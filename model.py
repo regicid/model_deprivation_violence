@@ -8,11 +8,6 @@ import matplotlib
 from tqdm import tqdm
 import copy
 
-def dyn_prog(T,p,v,prob_matrixes,n=10,r=.99,γ=1/3,m=.01,f2=.05,ω=.1,β=10,π=20,state_space = np.round(np.linspace(-50,50,1001),1)):
-    
-    return fitness, exp_fitness, decisions
-
-
 class Population:
     def __init__(self,μ,σ=4,N=10**5,T = 200,n=10,r=.99,γ=1/3,β=10,π=20,m=.01,f2=.05,ω=.1,state_space = np.round(np.linspace(-50,50,1001),1),initial_v=0,update_rate = 1):
         self.μ = μ
