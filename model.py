@@ -26,7 +26,7 @@ class Population:
         self.states = np.round(np.random.normal(loc=self.μ,scale=self.σ,size=self.N),1).clip(self.state_space.min(),self.state_space.max())
         self.strategies = np.zeros(self.N,dtype="int8")
         self.p = 0
-        self.v = initial_v
+        self.v = 0 
         def norm_distrib(x,loc,scale=np.sqrt(1-r**2)*σ):
             x = np.array(x)
             loc = np.array(loc)
