@@ -4,5 +4,5 @@ from model import Population
 import pickle
 import numpy as np
 P = Population(mu)
-P.round(10)
+P.round(100)
 np.save(f"result_{mu}.npy",P.frequencies)
