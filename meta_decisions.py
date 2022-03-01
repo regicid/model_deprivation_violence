@@ -15,10 +15,11 @@ for k in range(len(M)):
     for j in range(len(P)):
         for i in tqdm(range(len(V))):
             fitness, exp,decisions = dyn_prog(p=P[j],v=V[i],prob_matrixes=prob_matrixes,m = M[k])
-            slice=k*len(Results.index)/len(M)+(len(V)*j + i)*len(a):(len(V)*j + i+1)*len(a)
-            Results.v[slice] = V[i]
-            Results.p[slice] = P[j]
-            Results.resources[slice] = np.linspace(-50,50,1001)
-            Results.action[slice] = decisions
+            slice_b=k*len(Results.index)/len(M)+(len(V)*j + i)*len(a)
+            slice_e = (len(V)*j + i+1)*len(a)
+            Results.v[slice_b:slice_e] = V[i]
+            Results.p[slice_b:slice_e] = P[j]
+            Results.resources[slice_b:slice_e] = np.linspace(-50,50,1001)
+            Results.action[slice_b:slice_e] = decisions
 
 np.save("Results/results.npy",Results)
