@@ -17,6 +17,7 @@ class Population:
         self.T = T
         self.r = r
         self.β = β
+        self.π = π
         self.m = m
         self.f2 = f2
         self.ω = ω
@@ -108,11 +109,12 @@ class Population:
                 groups.append(np.array(perm[(i*self.n):(i+1)*self.n]))
             for group in groups:
                 strat = self.strategies[group]
-                if 3 in strat:
-                    stealer = np.random.choice(group[strat==3])
+                if 2 in strat:
+                    stealer = np.random.choice(group[strat==2])
                     targets = np.delete(group,np.where(group==stealer)[0])
+                    strat = np.delete(strat,np.where(group==stealer)[0])
                     target = np.random.choice(targets[(strat==0)+ (0 not in strat)])
-                    caught = (np.random.random()<γ)
+                    caught = (np.random.random()<self.γ)
                     if self.strategies[target]>0:
                         fight_winner = np.random.random()>.5 #Symetric fight
                         self.states[target] -= self.β*fight_winner
