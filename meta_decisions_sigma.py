@@ -4,7 +4,7 @@ import numpy as np
 from tqdm import tqdm
 import pandas as pd
 
-a = dyn_prog(0,0,prob_matrixes)[0]
+a = dyn_prog(0,0,prob_matrixer())[0]
 
 M = [4,8,12,16]
 V = np.linspace(.001,.999,50)
@@ -23,4 +23,4 @@ for k in range(len(M)):
             Results.action[slice_b:slice_e] = decisions
             Results.sigma[slice_b:slice_e] = M[k]
 
-np.save("Results/decisions_f.npy",Results)
+np.save("Results/decisions_sigma.npy",Results)
