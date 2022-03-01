@@ -4,7 +4,6 @@ import numpy as np
 from tqdm import tqdm
 import pandas as pd
 
-prob_matrixes = prob_matrixer()
 a = dyn_prog(0,0,prob_matrixes)[0]
 
 M = [4,8,12,16]
@@ -12,10 +11,10 @@ V = np.linspace(.001,.999,50)
 P = [10**-4,.001,.003,.01,.1]
 Results = pd.DataFrame(index = np.arange(len(P)*len(V)*len(a)*len(M)),columns=("v","p","resources","action","sigma"))
 for k in range(len(M)):
-    prob_matrixes = prob_matrixer()
+    prob_matrixes = prob_matrixer(σ = M[k])
     for j in range(len(P)):
         for i in tqdm(range(len(V))):
-            fitness, exp,decisions = dyn_prog(p=P[j],v=V[i],prob_matrixes=prob_matrixes,σ = M[k])
+            fitness, exp,decisions = dyn_prog(p=P[j],v=V[i],prob_matrixes=prob_matrixes)
             slice_b = int(k*len(Results.index)/len(M) + (len(V)*j + i)*len(a))
             slice_e = int(k*len(Results.index)/len(M) + (len(V)*j + i+1)*len(a))
             Results.v[slice_b:slice_e] = V[i]
