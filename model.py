@@ -100,7 +100,7 @@ class Population:
         self.strategies[z] = strategies[positions]
     def round(self,t):
         self.frequencies = np.zeros(shape = (3,t))
-        if self:tqdm:
+        if self.tqdm:
             ran = tqdm(range(t))
         else:
             ran = range(t)
