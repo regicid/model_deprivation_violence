@@ -9,7 +9,7 @@ from tqdm import tqdm
 import copy
 
 class Population:
-    def __init__(self,μ,σ=4,N=10**5,T = 200,n=10,r=.99,γ=1/3,β=10,π=20,m=.01,f2=.05,ω=.1,state_space = np.round(np.linspace(-50,50,1001),1),initial_v=0,update_rate = 1):
+    def __init__(self,μ,σ=4,N=10**5,T = 200,n=10,r=.99,γ=1/3,β=10,π=20,m=.01,f2=.05,ω=.1,state_space = np.round(np.linspace(-50,50,1001),1),initial_v=0,update_rate = 1,tqdm=False):
         self.μ = μ
         self.σ = σ
         self.N = N
@@ -28,6 +28,7 @@ class Population:
         self.strategies = np.zeros(self.N,dtype="int8")
         self.p = 0
         self.v = 0 
+        self.tqdm = tqdm
         def norm_distrib(x,loc,scale=np.sqrt(1-r**2)*σ):
             x = np.array(x)
             loc = np.array(loc)
@@ -99,7 +100,11 @@ class Population:
         self.strategies[z] = strategies[positions]
     def round(self,t):
         self.frequencies = np.zeros(shape = (3,t))
-        for z in range(t):
+        if self:tqdm:
+            ran = tqdm(range(t))
+        else:
+            ran = range(t)
+        for z in ran:
             ### Choices
             self.update_strategies()
             ### Actions' consequences
