@@ -1,7 +1,7 @@
 import sys
 mu = float(sys.argv[1])
 #m = float(sys.argv[2])
-M = [10**-3,10**-2,.05]
+M = [.1,.25]
 from model import Population
 import pickle
 import numpy as np
