@@ -9,7 +9,7 @@ from tqdm import tqdm
 import copy
 
 class Population:
-    def __init__(self,μ,σ=4,N=10**5,T = 200,n=10,r=.99,γ=1/3,β=10,π=20,m=.01,f2=.05,ω=.1,state_space = np.round(np.linspace(-50,50,1001),1),initial_v=0,update_rate = 1,tqdm=False):
+    def __init__(self,μ,σ=4,N=10**5,T = 200,n=10,r=.99,γ=1/3,β=10,π=20,m=.01,f2=.05,ω=.1,state_space = np.round(np.linspace(-50,50,1001),1),initial_v=0,update_rate = 1,tqdm=False,affect_states=False):
         self.μ = μ
         self.σ = σ
         self.N = N
@@ -22,6 +22,7 @@ class Population:
         self.f2 = f2
         self.ω = ω
         self.γ = γ
+        self.afffect_states = affect_states
         self.update_rate = update_rate
         self.state_space = state_space
         self.states = np.round(np.random.normal(loc=self.μ,scale=self.σ,size=self.N),1).clip(self.state_space.min(),self.state_space.max())
@@ -108,25 +109,26 @@ class Population:
             ### Choices
             self.update_strategies()
             ### Actions' consequences
-            groups = []
-            perm = np.random.permutation(self.N)     
-            for i in range(np.int(self.N/self.n)+1):
-                groups.append(np.array(perm[(i*self.n):(i+1)*self.n]))
-            for group in groups:
-                strat = self.strategies[group]
-                if 2 in strat:
-                    stealer = np.random.choice(group[strat==2])
-                    targets = np.delete(group,np.where(group==stealer)[0])
-                    strat = np.delete(strat,np.where(group==stealer)[0])
-                    target = np.random.choice(targets[(strat==0)+ (0 not in strat)])
-                    caught = (np.random.random()<self.γ)
-                    if self.strategies[target]>0:
-                        fight_winner = np.random.random()>.5 #Symetric fight
-                        self.states[target] -= self.β*fight_winner
-                        self.states[stealer] += self.β*(1-fight_winner)*(1-caught) - self.π*caught
-                    else: #If the target is non violent, the stealer just takes resources
-                        self.states[target] -= self.β
-                        self.states[stealer] += self.β*(1-caught) - self.π*caught
+            if self.afffect_states:
+                groups = []
+                perm = np.random.permutation(self.N)     
+                for i in range(np.int(self.N/self.n)+1):
+                    groups.append(np.array(perm[(i*self.n):(i+1)*self.n]))
+                for group in groups:
+                    strat = self.strategies[group]
+                    if 2 in strat:
+                        stealer = np.random.choice(group[strat==2])
+                        targets = np.delete(group,np.where(group==stealer)[0])
+                        strat = np.delete(strat,np.where(group==stealer)[0])
+                        target = np.random.choice(targets[(strat==0)+ (0 not in strat)])
+                        caught = (np.random.random()<self.γ)
+                        if self.strategies[target]>0:
+                            fight_winner = np.random.random()>.5 #Symetric fight
+                            self.states[target] -= self.β*fight_winner
+                            self.states[stealer] += self.β*(1-fight_winner)*(1-caught) - self.π*caught
+                        else: #If the target is non violent, the stealer just takes resources
+                            self.states[target] -= self.β
+                            self.states[stealer] += self.β*(1-caught) - self.π*caught
             
             #Shuffle the states (social mobility)
             fluctuations = np.random.normal(loc=self.μ,scale=np.sqrt(1-self.r**2)/(1-self.r)*self.σ,size=self.N)
