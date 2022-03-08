@@ -9,7 +9,7 @@ a = dyn_prog(0,0,prob_matrixes)[0]
 
 M = [10**-3,10**-2,.05,.2]
 V = np.linspace(.001,.999,50)
-P = [10**-4,.001,.003,.01,.1]
+P = [10**-4,.001,.01,.1]
 Results = pd.DataFrame(index = np.arange(len(P)*len(V)*len(a)*len(M)),columns=("v","p","resources","action","m"))
 for k in range(len(M)):
     for j in range(len(P)):
