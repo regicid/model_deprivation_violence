@@ -12,8 +12,9 @@ import sys
 links = pd.read_csv("~/lemonde.csv")
 dates = links.date.unique()
 #dates = dates[25242:]
-engine = create_engine('sqlite:///3gram_lemonde.db', echo = True)
-engine2 = create_engine('sqlite:///4gram_lemonde.db', echo = True)
+engines = []
+for i in range(5):
+	engines.append(create_engine(f'sqlite:///{i+1}gram_lemonde.db', echo = True))
 
 meta = MetaData()
 monogram = Table(
@@ -48,46 +49,32 @@ for date in dates:
 		pageSoup = BeautifulSoup(page, 'html.parser')
 		title = pageSoup.find("title")
 		if title is not None:
-			text += title.text + "\n"
+			text += title.text.replace("’","'") + "\n"
 		sous_titre = pageSoup.find("p",{"class":"article__desc"})
 		if sous_titre is not None:
-			text += re.split("[<>]",str(sous_titre))[-3] + "\n"
+			text += re.split("[<>]",str(sous_titre))[-3].replace("’","'") + "\n"
 		legendes_photo = pageSoup.find_all("figure",{"class":"article__media"})
 		if legendes_photo is not None:
-			text += "\n".join([i.img["alt"] for i in legendes_photo])
+			text += "\n".join([i.img["alt"].replace("’","'") for i in legendes_photo])
 		if "live" in urls[i]:
 			a = pageSoup.find_all("p",{"class":"post__live-container--answer-text post__space-node"})
 		else:
 			a = pageSoup.find_all("p", {"class": "article__paragraph"})
 		text += '\n'.join([z.text for z in a]) + "\n"
-	text_split = re.split('[!"#$%&\()*+,./:;<=>?@[\\]^_`{|}~\n]',text.lower())
+	text_split = re.split('[!"#$%&\()*+,./:;<=>?@[\\]^_`{|}~\n]',text.lower().replace("’","'"))
 	ngrams = []
+	for length in range(5):
+		ngrams.append([])
 	for sentence in text_split:
 		tokens = tokenizer.tokenize(sentence)
-		ngrams += list(nltk.ngrams(tokens,3))
-	matrix = pd.DataFrame.from_dict(Counter(ngrams),orient="index")
-	matrix.columns = ["n"]
-	matrix["gram"] = [' '.join(gram) for gram in matrix.index]
-	matrix["annee"] = date.split("-")[0]
-	matrix["mois"] = date.split("-")[1]
-	matrix["jour"] = date.split("-")[2]
-	matrix.to_sql("gram",engine,if_exists="append",index=False)
-	ngrams = []
-	if len(matrix.index)>1:
-		for sentence in text_split:
-			tokens = tokenizer.tokenize(sentence)
-			ngrams += list(nltk.ngrams(tokens,4))
-		matrix = pd.DataFrame.from_dict(Counter(ngrams),orient="index")
-		matrix.columns = ["n"]
-		matrix["gram"] = [' '.join(gram) for gram in matrix.index]
-		matrix["annee"] = date.split("-")[0]
-		matrix["mois"] = date.split("-")[1]
-		matrix["jour"] = date.split("-")[2]
-		matrix.to_sql("gram",engine2,if_exists="append",index=False)
-
-
-
-
-
-
-
+		for length in range(5):
+			ngrams[length] += list(nltk.ngrams(tokens,length+1))
+	for length in range(5):
+		matrix = pd.DataFrame.from_dict(Counter(ngrams[i]),orient="index")
+		if len(matrix.index)>1:
+			matrix.columns = ["n"]
+			matrix["gram"] = [' '.join(gram) for gram in matrix.index]
+			matrix["annee"] = date.split("-")[0]
+			matrix["mois"] = date.split("-")[1]
+			matrix["jour"] = date.split("-")[2]
+			matrix.to_sql("gram",engines[i],if_exists="append",index=False)
