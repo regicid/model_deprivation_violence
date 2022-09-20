@@ -67,13 +67,17 @@ class Population:
         strategies = decisions
         positions = ((self.states-state_space.min())/(self.state_space[1]-self.state_space[0])).round().astype('int')
         self.strategies = strategies[positions]
-        z = self.strategies < 2
-        zz = np.random.random(z.sum()) < initial_v
-        self.strategies[z] = zz
-    def update_strategies(self):
+	self.p = np.mean(self.strategies==2)
+	self.v = initial_v
+	self.update_strategies()
+        #z = self.strategies < 2
+        #zz = np.random.random(z.sum()) < initial_v
+        #self.strategies[z] = zz
+    def measure(self):
         self.p = np.mean(self.strategies==2)
         self.v = np.mean(self.strategies>0)
-        p = (1-(1-self.p)**self.n)/self.n
+    def update_strategies(self)    
+	p = (1-(1-self.p)**self.n)/self.n
         if self.v==1: 
             v=.999
         else:
@@ -107,6 +111,7 @@ class Population:
             ran = range(t)
         for z in ran:
             ### Choices
+	    self.measure()
             self.update_strategies()
             ### Actions' consequences
             if self.afffect_states:
