@@ -76,7 +76,9 @@ class Population:
     def measure(self):
         self.p = np.mean(self.strategies==2)
         self.v = np.mean(self.strategies>0)
-    def update_strategies(self,update_rate = self.update_rate):    
+    def update_strategies(self,update_rate = None):
+        if update_rate = None:
+        	update_rate = self.update_rate
         p = (1-(1-self.p)**self.n)/self.n
         if self.v==1: 
             v=.999
