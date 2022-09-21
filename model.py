@@ -67,12 +67,12 @@ class Population:
         strategies = decisions
         positions = ((self.states-state_space.min())/(self.state_space[1]-self.state_space[0])).round().astype('int')
         self.strategies = strategies[positions]
-        self.p = np.mean(self.strategies==2)
-        self.v = initial_v
-        self.update_strategies(update_rate=1)
-        #z = self.strategies < 2
-        #zz = np.random.random(z.sum()) < initial_v
-        #self.strategies[z] = zz
+        #self.p = np.mean(self.strategies==2)
+        #self.v = initial_v
+        #self.update_strategies(update_rate=1)
+        z = self.strategies < 2
+        zz = np.random.random(z.sum()) < initial_v
+        self.strategies[z] = zz
     def measure(self):
         self.p = np.mean(self.strategies==2)
         self.v = np.mean(self.strategies>0)
