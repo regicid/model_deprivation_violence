@@ -7,9 +7,9 @@ import pandas as pd
 prob_matrixes = prob_matrixer()
 a = dyn_prog(0,0,prob_matrixes)[0]
 
-GAMMA = [.25,1/3,.5,.66]
+GAMMA = [.1,.2,1/3]
 V = np.linspace(.001,.999,50)
-P = [.001,.01,.1]
+P = [.001,.01,.1,.35]
 Results = pd.DataFrame(index = np.arange(len(P)*len(V)*len(a)*len(GAMMA)),columns=("v","p","resources","action","gamma"))
 for k in range(len(GAMMA)):
     for j in range(len(P)):
