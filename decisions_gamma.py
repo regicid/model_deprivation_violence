@@ -14,8 +14,8 @@ Results = pd.DataFrame(index = np.arange(len(P)*len(V)*len(a)*len(GAMMA)),column
 for k in range(len(GAMMA)):
     for j in range(len(P)):
         for i in tqdm(range(len(V))):
-            prob_matrixes = prob_matrixer(π = 10,β=5)
-            fitness, exp,decisions = dyn_prog(p=P[j],v=V[i],prob_matrixes=prob_matrixes,γ = GAMMA[k],π = 10,β=5)
+            prob_matrixes = prob_matrixer(π = 20,β=10)
+            fitness, exp,decisions = dyn_prog(p=P[j],v=V[i],prob_matrixes=prob_matrixes,γ = GAMMA[k],π = 20,β=10)
             slice_b = int(k*len(Results.index)/len(GAMMA) + (len(V)*j + i)*len(a))
             slice_e = int(k*len(Results.index)/len(GAMMA) + (len(V)*j + i+1)*len(a))
             Results.v[slice_b:slice_e] = V[i]
