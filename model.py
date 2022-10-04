@@ -42,7 +42,8 @@ class Population:
             z = (norm_distrib(x = state_space,loc = r*state_space + (1-r)*μ + modif,scale = np.sqrt(1-r**2)*σ))
             return(z)
         self.prob_matrixes = np.array([probas(0),probas(-10),probas(10),probas(-20)])
-        p = (1-(1-self.p)**self.n)/self.n
+        #p = (1-(1-self.p)**self.n)/self.n
+        p = self.p
         if self.v==1: 
             v=.999
         else:
