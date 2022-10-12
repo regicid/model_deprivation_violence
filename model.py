@@ -9,7 +9,7 @@ from tqdm import tqdm
 import copy
 
 class Population:
-    def __init__(self,μ,σ=4,N=10**5,T = 200,n=10,r=.99,γ=1/3,β=10,π=20,m=.01,f2=.05,ω=.1,state_space = np.round(np.linspace(-50,50,1001),1),initial_v=0,update_rate = 1,tqdm=False,affect_states=False):
+    def __init__(self,μ,σ=4,N=10**5,T = 200,n=10,r=.99,γ=1/3,β=10,π=20,m=.01,λ=.05,ω=.1,state_space = np.round(np.linspace(-50,50,1001),1),initial_v=0,update_rate = 1,tqdm=False,affect_states=False):
         self.μ = μ
         self.σ = σ
         self.N = N
@@ -19,7 +19,7 @@ class Population:
         self.β = β
         self.π = π
         self.m = m
-        self.f2 = f2
+        self.λ = λ
         self.ω = ω
         self.γ = γ
         self.afffect_states = affect_states
@@ -61,7 +61,7 @@ class Population:
             temp_fitness = []
             exp_fitness = np.empty(shape=(3,len(state_space)),dtype = "float")
             for strat in range(3):
-                exp_fitness[strat,:] = np.dot(outcomes[strat],fitness*(1-self.ω*(state_space<0))*(1 - prob_fight[strat]*self.f2/2))
+                exp_fitness[strat,:] = np.dot(outcomes[strat],fitness*(1-self.ω*(state_space<0))*(1 - prob_fight[strat]*self.λ/2))
             decisions = np.argmax(exp_fitness,axis=0)
             fitness = np.max(exp_fitness,axis=0)
         strategies = decisions
@@ -93,7 +93,7 @@ class Population:
             temp_fitness = []
             exp_fitness = np.empty(shape=(3,len(self.state_space)),dtype = "float")
             for strat in range(3):
-                exp_fitness[strat,:] = np.dot(outcomes[strat],fitness*(1-self.ω*(self.state_space<0))*(1 - prob_fight[strat]*self.f2/2))
+                exp_fitness[strat,:] = np.dot(outcomes[strat],fitness*(1-self.ω*(self.state_space<0))*(1 - prob_fight[strat]*self.λ/2))
             decisions = np.argmax(exp_fitness,axis=0)
             fitness = np.max(exp_fitness,axis=0)
         strategies = decisions
