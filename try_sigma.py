@@ -1,7 +1,7 @@
 import sys
 mu = 15
 sigma = float(sys.argv[1])
-N = [20,50]
+N = [50]
 m = .2
 from model import Population
 import pickle
