@@ -63,7 +63,7 @@ def panel_plot(name,column,col_min = None,col_max = None):
     cmap = sns.cubehelix_palette(n_colors=3,start=0, rot=.8, light=0.9, as_cmap=True)
     cmap = cmap_discretize(plt.cm.get_cmap('jet', 3),3)
 
-    Results = np.load("/Users/benoit2c/model/Results/"+name,allow_pickle=True)
+    Results = np.load(name,allow_pickle=True)
     Results = pd.DataFrame(Results).loc[::-1]
     Results.set_axis(["Violence","Stealing","Resources","Actions",column],axis=1,inplace=True)
     if col_min is not None:
@@ -99,4 +99,4 @@ def panel_plot(name,column,col_min = None,col_max = None):
 
     fg.set_titles(size=22,fontweight='bold')
     plt.tight_layout()
-    fg.savefig(f"/Users/benoit2c/Downloads/{name}_decisions.jpg",dpi=300)
+    fg.savefig(f"{name}_decisions.jpg",dpi=300)
