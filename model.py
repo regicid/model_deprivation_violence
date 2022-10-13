@@ -107,6 +107,9 @@ class Population:
         else:
             ran = range(t)
         for z in ran:
+            #Record behaviours
+            freq = np.unique(self.strategies,return_counts=True)
+            self.frequencies[freq[0],z] = freq[1]/self.N
             ### Choices
             self.update_strategies()
             ### Actions' consequences
@@ -135,7 +138,3 @@ class Population:
             fluctuations = np.random.normal(loc=self.μ,scale=np.sqrt(1-self.r**2)/(1-self.r)*self.σ,size=self.N)
             self.states = self.r*self.states + (1-self.r)*fluctuations
             self.states = self.states.clip(np.min(self.state_space),np.max(self.state_space)).round(1)
-            
-            #Record behaviours
-            freq = np.unique(self.strategies,return_counts=True)
-            self.frequencies[freq[0],z] = freq[1]/self.N
