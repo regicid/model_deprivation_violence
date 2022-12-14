@@ -43,6 +43,7 @@ class Population:
             return(z)
         self.prob_matrixes = np.array([probas(0),probas(-10),probas(10),probas(-20)])
         p = (1-(1-self.p)**self.n)/self.n
+        p = self.p
         if self.v==1: 
             v=.999
         else:
@@ -73,8 +74,8 @@ class Population:
     def update_strategies(self):
         self.p = np.mean(self.strategies==2)
         self.v = np.mean(self.strategies>0)
-        p = (1-(1-self.p)**self.n)/self.n
-        #p = self.p
+        #p = (1-(1-self.p)**self.n)/self.n
+        p = self.p
         if self.v==1: 
             v=.999
         else:
