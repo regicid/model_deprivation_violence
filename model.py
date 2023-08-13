@@ -48,7 +48,7 @@ class Population:
             v=.999
         else:
             v = self.v
-        fitness = (100+self.state_space)/2
+        fitness = (100+self.state_space)
         decisions = [0,0]
         #Strategy order: submissive, discriminate violent, indiscriminate violent, steal
         prob_stolen= [np.clip(p*(1-v**self.n)/(1-v),0,1),np.clip(p*v**(self.n-1),0,1)]
